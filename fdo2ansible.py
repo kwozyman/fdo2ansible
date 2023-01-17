@@ -24,6 +24,8 @@ class F2AServer():
             setattr(self, k, final_config[k])
         self._basic_logging()
         self.set_loglevel(self.loglevel)
+        final_config['awx_token'] = '********'
+        logging.debug('Using config: {}'.format(final_config))
         self.known_guids = []
         self.webapp = flask.Flask('fdo2ansible')
         self.get_known_guids()
@@ -185,7 +187,8 @@ class F2AServer():
                     logging.error('Cannot determine registration for device {}'.format(guid))
                     flask.abort(500)
                 if registered:
-                    return('{} registered already'.format(guid))
+                    logging.warning('{} is already registered'.format(guid))
+                    return('{} registered already\n'.format(guid))
                 else:
                     logging.info('Registering {} to Ansible'.format(guid))
                     if not self.register_to_ansible(guid):
