@@ -153,10 +153,11 @@ class F2AServer():
         logging.debug('{} is not registered'.format(guid))
         return False
     
-    def register_to_ansible(self, guid):
-        host_vars = {'guid': guid}
+    def register_to_ansible(self, guid, ip):
+        host_vars = {'guid': guid,
+                     'ansible_host': ip}
         try:
-            register_output = subprocess.check_output(self._build_awx_params() + 'host create --name {} --inventory {} --variables "guid: {}"'.format(guid, self.awx_inventory_id, guid), shell=True)
+            register_output = subprocess.check_output(self._build_awx_params() + "host create --name {} --inventory {} --variables '{}'".format(guid, self.awx_inventory_id, json.dumps(host_vars)), shell=True)
             logging.debug('Registered {} to Ansible: {}'.format(guid, register_output))
             return True
         except:
@@ -178,8 +179,9 @@ class F2AServer():
         def about_page():
             return('FDO2Ansible')
         
-        @self.webapp.route('/device/<guid>')
-        def register_device(guid):
+        @self.webapp.route('/device/<guid>/<ip>')
+        def register_device(guid, ip):
+            #TODO: validate ip
             logging.info('Received register request from {}'.format(guid))
             if guid in self.known_guids:
                 registered = self.is_registered(guid)
@@ -191,7 +193,7 @@ class F2AServer():
                     return('{} registered already\n'.format(guid))
                 else:
                     logging.info('Registering {} to Ansible'.format(guid))
-                    if not self.register_to_ansible(guid):
+                    if not self.register_to_ansible(guid, ip):
                         logging.error('Could not register {} to Ansible!'.format(guid))
                         flask.abort(500)
                     else:
