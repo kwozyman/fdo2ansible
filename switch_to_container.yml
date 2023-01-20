@@ -1,0 +1,4 @@
+---
+- name: rebase to os container
+  command: "rpm-ostree rebase {{ os_container_image }} --experimental"
+  register: rebase_output
