@@ -183,6 +183,7 @@ class F2AServer():
         def register_device(guid, ip):
             #TODO: validate ip
             logging.info('Received register request from {}'.format(guid))
+            self.get_known_guids()
             if guid in self.known_guids:
                 registered = self.is_registered(guid)
                 if registered is None:
