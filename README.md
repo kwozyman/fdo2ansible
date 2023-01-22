@@ -27,14 +27,14 @@ The AWX token can be obtained by running `awx login` (this can be done using the
 Usage
 ---
 
-This container is listening on port `5000` for a http call from the fdo registered devices, in the form: http://<fdo2ansible-server>:5000/<guid>/<ip>. The new device is supposed to be configured to run fdo2ansible via serviceinfo api:
+This container is listening on port `5000` for a http call from the fdo registered devices, in the form: http://<fdo2ansible-server>:5000/<guid>. The new device is supposed to be configured to run fdo2ansible via serviceinfo api:
 
 ```
 ...
   - command: /bin/bash
     args:
     - -c
-    - 'curl http://192.168.122.253:5000/device/$(fdo-owner-tool dump-device-credential /etc/device-credentials | grep GUID | cut -d: -f2 | xargs)/$(hostname -i)'
+    - 'curl http://192.168.122.253:5000/device/$(fdo-owner-tool dump-device-credential /etc/device-credentials | grep GUID | cut -d: -f2 | xargs)'
 ...
 ```
 
