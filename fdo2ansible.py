@@ -169,7 +169,7 @@ class F2AServer():
             for f in files:
                 #TODO: regex validation of guid file name
                 if f in self.known_guids:
-                    logging.debug('{} already known, skipping'.format(guid))
+                    logging.debug('{} already known, skipping'.format(f))
                 else:
                     self.known_guids.append(f)
                     logging.info('Found new device {}, added to known list'.format(f))
