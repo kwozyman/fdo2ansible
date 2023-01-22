@@ -17,12 +17,10 @@ ExecStart=/usr/bin/podman run \
 	--sdnotify=conmon \
 	-d \
 	--replace \
-	--tty \
-	--interactive \
 	--pull=newer \
 	--name fdo2ansible \
 	--publish 0.0.0.0:5000:5000 \
-	--volume /root/fdo/:/data:ro \
+	--volume /root/fdo/:/data:ro,z \
 	--env AWX_ENDPOINT \
 	--env AWX_TOKEN \
 	--entrypoint fdo2ansible fdo2ansible
