@@ -179,11 +179,13 @@ class F2AServer():
         def about_page():
             return('FDO2Ansible')
         
-        @self.webapp.route('/device/<guid>/<ip>')
-        def register_device(guid, ip):
+        @self.webapp.route('/device/<guid>')
+        def register_device(guid):
             #TODO: validate ip
             logging.info('Received register request from {}'.format(guid))
             self.get_known_guids()
+            ip = flask.request.remote_addr
+            logging.info('Got remote ip {}'.format(ip))
             if guid in self.known_guids:
                 registered = self.is_registered(guid)
                 if registered is None:
